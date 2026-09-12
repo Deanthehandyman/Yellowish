@@ -3,398 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Pocket Frontier: The Complete Prologue</title>
+<title>Pocket Frontier: Legends Prototype</title>
 <style>
-  :root{
-    --ink:#2c3e50; --paper:#ecf0f1; --gold:#f1c40f;
-    --leaf:#2ecc71; --water:#3498db; --fire:#e74c3c;
-    --panel:#ffffff; --panel-border:#bdc3c7;
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent; user-select:none;}
-  html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-  #app{position:fixed;inset:0;}
-  #c{position:absolute;inset:0;display:block;touch-action:none;}
-
-  .pixel-frame{
-    background: rgba(255, 255, 255, 0.95);
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    color: var(--ink);
-  }
-  .hidden{display:none !important;}
-
-  #ui-layer { position: absolute; inset: 0; pointer-events: none; z-index: 10;}
-  #ui-layer > * { pointer-events: auto; }
-
-  #topHUD { position:absolute; top:20px; left:20px; right:20px; display: flex; justify-content: space-between;}
-  .hudBox { font-size:14px; font-weight: 700; padding:10px 15px; text-transform: uppercase; letter-spacing: 1px;}
+  * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+  body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #87CEEB; font-family: sans-serif; }
+  #c { position: absolute; inset: 0; display: block; }
   
-  #btnContainer { position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
-  .menuBtn { font-size:14px; font-weight: bold; padding:12px 20px; cursor:pointer; text-align: center; transition: transform 0.1s;}
-  .menuBtn:active { transform: scale(0.95); }
-
-  /* Dialog */
-  #dialogBox{ position:absolute; left:10%; right:10%; bottom:5%; padding:20px; z-index:40; font-size:18px; font-weight: bold; line-height:1.5;}
-  #dialogBox button{ margin-top:10px; float:right; background:var(--ink); color:#fff; border:none; padding:10px 20px; border-radius: 4px; cursor:pointer; font-weight: bold;}
-
-  /* Title & Naming Screen */
-  #startScreen{ position:absolute; inset:0; background:linear-gradient(135deg, var(--gold), #f39c12); color:var(--ink); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:50; pointer-events: auto;}
-  #startScreen h1{ font-size:48px; margin-bottom: 5px; text-shadow: 2px 2px 0 rgba(255,255,255,0.5);}
-  #namingForm { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;}
-  #namingForm input { font-size: 20px; padding: 10px; border: 3px solid var(--ink); border-radius: 6px; text-align: center; font-weight: bold;}
-  #namingForm button { font-size: 18px; padding: 10px 30px; background: var(--ink); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;}
-
-  /* Starter Selection Overlay */
-  #starterOverlay { position:absolute; inset:0; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:45; pointer-events: auto;}
-  #starterOverlay h2 { color: #fff; font-size: 32px; margin-bottom: 30px;}
-  .starterRow{display:flex; gap:20px; flex-wrap:wrap; justify-content:center;}
-  .starterCard{ width:160px; padding:20px 15px; background:#fff; border:4px solid var(--ink); border-radius: 12px; text-align: center; cursor:pointer; font-weight: bold; transition: all 0.2s;}
-  .starterCard:hover{ transform:translateY(-8px); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
-
-  /* Battle UI (Simplified for space) */
-  #battleUI{position:absolute; inset:0; z-index:35; display:flex; flex-direction:column; pointer-events: none;}
-  .battleStage{flex:1; position:relative;}
-  .card{ position:absolute; padding:12px 16px; min-width:220px; pointer-events: auto; }
-  .foeCard{top:40px; left:40px; border-bottom: 4px solid var(--fire);}
-  .selfCard{bottom:160px; right:40px; border-bottom: 4px solid var(--water);}
-  .nameRow { display: flex; justify-content: space-between; font-size: 16px; font-weight: 900; margin-bottom: 8px;}
-  .hpRow{display:flex; align-items:center; gap:10px; font-size:12px; font-weight: bold;}
-  .hpBarOuter{flex:1; height:12px; background:#e0e0e0; border-radius: 6px; overflow:hidden;}
-  .hpBarInner{height:100%; background:var(--leaf); width:100%; transition:width 0.4s ease-out;}
-  #battleBottom { position: absolute; bottom: 0; left: 0; right: 0; height: 140px; display: flex; pointer-events: auto;}
-  #battleLog{ flex: 1; padding:20px; font-size:18px; font-weight: bold; background:rgba(255,255,255,0.95); border-top: 4px solid var(--ink); border-right: 4px solid var(--ink); }
-  #battleMenu{ flex: 1; background:rgba(255,255,255,0.95); padding:15px; display:grid; grid-template-columns:1fr 1fr; gap:10px; border-top:4px solid var(--ink); }
-  .battleBtn{ padding:15px; border:2px solid var(--panel-border); border-radius: 6px; background:#fff; color:var(--ink); font-size:15px; font-weight: bold; cursor:pointer;}
+  #ui-layer { position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; flex-direction: column; justify-content: space-between; padding: 20px;}
+  .hud { background: rgba(0,0,0,0.5); color: white; padding: 10px 15px; border-radius: 8px; font-weight: bold; pointer-events: auto; }
+  
+  /* Mobile Joystick */
+  #joyBase { position: absolute; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); bottom: 40px; left: 40px; display: none; pointer-events: none;}
+  #joyKnob { position: absolute; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.8); top: 35px; left: 35px; }
+  
+  #hint { align-self: center; background: rgba(255,255,255,0.9); color: #333; padding: 10px 20px; border-radius: 20px; margin-top: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
-<div id="app">
   <canvas id="c"></canvas>
-
   <div id="ui-layer">
-    <div id="topHUD">
-      <div id="topHint" class="pixel-frame hudBox hidden">Current Objective</div>
-    </div>
+    <div class="hud">Legends Prototype - v0.1</div>
+    <div id="hint">Left side: Drag to run | Right side: Swipe to look</div>
+    <div id="joyBase"><div id="joyKnob"></div></div>
   </div>
-
-  <div id="dialogBox" class="pixel-frame hidden">
-    <div id="dialogText"></div>
-    <button id="dialogNext">NEXT ▸</button>
-  </div>
-
-  <div id="startScreen">
-    <h1>POCKET FRONTIER</h1>
-    <h3 style="margin-top:0;">The Prologue</h3>
-    <div id="namingForm">
-      <label style="font-weight: bold; font-size: 18px;">What is your name?</label>
-      <input type="text" id="playerNameInput" value="Dean" maxlength="10">
-      <button id="startGameBtn">START ADVENTURE</button>
-    </div>
-  </div>
-
-  <div id="starterOverlay" class="hidden">
-    <h2>Choose your Partner</h2>
-    <div class="starterRow" id="starterRow"></div>
-  </div>
-
-  <div id="battleUI" class="hidden">
-    <!-- Battle UI remains standard -->
-    <div class="battleStage">
-      <div class="foeCard card pixel-frame">
-        <div class="nameRow"><span id="foeName"></span><span id="foeLv"></span></div>
-        <div class="hpRow"><span>HP</span><div class="hpBarOuter"><div id="foeHpBar" class="hpBarInner"></div></div></div>
-      </div>
-      <div class="selfCard card pixel-frame">
-        <div class="nameRow"><span id="selfName"></span><span id="selfLv"></span></div>
-        <div class="hpRow"><span>HP</span><div class="hpBarOuter"><div id="selfHpBar" class="hpBarInner"></div></div></div>
-      </div>
-    </div>
-    <div id="battleBottom">
-      <div id="battleLog">…</div>
-      <div id="battleMenu"></div>
-    </div>
-  </div>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
 "use strict";
 
-const TYPE_COLOR = {Fire:0xe74c3c, Water:0x3498db, Grass:0x2ecc71, Normal:0x95a5a6, Electric:0xf1c40f};
-const SPECIES = {
-  voltmouse: {name:'Voltmouse', type:'Electric', hpBase:35, moves:[{name:'Thundershock', power:40, type:'Electric'}]},
-  seedtoad:  {name:'Seedtoad',  type:'Grass',    hpBase:45, moves:[{name:'Vine Whip',    power:45, type:'Grass'}]},
-  embertail: {name:'Embertail', type:'Fire',     hpBase:39, moves:[{name:'Ember',        power:40, type:'Fire'}]},
-  aquashell: {name:'Aquashell', type:'Water',    hpBase:44, moves:[{name:'Water Gun',    power:40, type:'Water'}]}
-};
-
-function makeCreature(id, level){
-  const s = SPECIES[id];
-  return {id, name:s.name, type:s.type, level, hp:s.hpBase, maxHp:s.hpBase, moves:s.moves, xp:0};
-}
-
-// GAME STATE
-const G = {
-  mode: 'start', 
-  map: 'house', // 'house', 'town', 'lab'
-  playerName: 'Player',
-  party: [], 
-  flags: { talkedToMom: false, hasStarter: false },
-  dialogQueue: [], 
-  dialogCallback: null,
-  player: {x: 0, z: 0, yaw: Math.PI, speed: 10.0, isMoving: false},
-  keys: {}, posHistory: []
-};
-
-// THREE.JS ENGINE
 const canvas = document.getElementById('c');
-const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87CEEB);
-const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 500);
+scene.fog = new THREE.FogExp2(0x87CEEB, 0.015);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-scene.add(ambientLight);
-const sun = new THREE.DirectionalLight(0xffffff, 0.8);
-sun.position.set(50, 100, 50);
+// Lighting
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const sun = new THREE.DirectionalLight(0xffdfb0, 1.2);
+sun.position.set(100, 200, 50);
+sun.castShadow = true;
+sun.shadow.camera.left = -50; sun.shadow.camera.right = 50;
+sun.shadow.camera.top = 50; sun.shadow.camera.bottom = -50;
 scene.add(sun);
 
-// MODEL GENERATOR
-function createCharacter(colorHex) {
-    const group = new THREE.Group();
-    const mat = new THREE.MeshToonMaterial({color: colorHex});
-    const skinMat = new THREE.MeshToonMaterial({color: 0xffdcb5});
-    const body = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.8, 0.4), mat);
-    body.position.y = 0.4;
-    const head = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), skinMat);
-    head.position.y = 1.05;
-    group.add(body, head);
-    return group;
+// Vast Environment
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), new THREE.MeshToonMaterial({color: 0x4CAF50}));
+ground.rotation.x = -Math.PI/2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Procedural Trees
+const treeGeo = new THREE.ConeGeometry(2, 6, 5);
+const treeMat = new THREE.MeshToonMaterial({color: 0x2E8B57});
+const trunkGeo = new THREE.CylinderGeometry(0.5, 0.5, 2);
+const trunkMat = new THREE.MeshToonMaterial({color: 0x5D4037});
+
+for(let i=0; i<200; i++){
+    const x = (Math.random() - 0.5) * 400;
+    const z = (Math.random() - 0.5) * 400;
+    if (Math.abs(x) < 10 && Math.abs(z) < 10) continue; // Keep spawn clear
+    
+    const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+    trunk.position.set(x, 1, z);
+    trunk.castShadow = true;
+    
+    const leaves = new THREE.Mesh(treeGeo, treeMat);
+    leaves.position.set(x, 4, z);
+    leaves.castShadow = true;
+    
+    scene.add(trunk, leaves);
 }
 
-// MAP GROUPS
-const houseGroup = new THREE.Group();
-const townGroup = new THREE.Group();
-const labGroup = new THREE.Group();
-scene.add(houseGroup, townGroup, labGroup);
+// Player Model
+const playerGroup = new THREE.Group();
+const pBody = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 1, 4, 8), new THREE.MeshToonMaterial({color: 0x3498db}));
+pBody.position.y = 1; pBody.castShadow = true;
+playerGroup.add(pBody);
+scene.add(playerGroup);
 
-// MAP 1: HOUSE (Offset at X = 100)
-houseGroup.position.set(100, 0, 0);
-const houseFloor = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), new THREE.MeshToonMaterial({color: 0xd2b48c}));
-houseFloor.rotation.x = -Math.PI/2;
-const houseWall = new THREE.Mesh(new THREE.BoxGeometry(10, 4, 1), new THREE.MeshToonMaterial({color: 0xf5f5dc}));
-houseWall.position.set(0, 2, -5);
-const momNpc = createCharacter(0xe84393); // Pink dress
-momNpc.position.set(2, 0, -2);
-const houseExit = new THREE.Mesh(new THREE.PlaneGeometry(2, 0.1), new THREE.MeshBasicMaterial({color: 0x000000}));
-houseExit.rotation.x = -Math.PI/2; houseExit.position.set(0, 0.01, 4.5);
-houseGroup.add(houseFloor, houseWall, momNpc, houseExit);
-
-// MAP 2: TOWN (Offset at X = 0)
-townGroup.position.set(0, 0, 0);
-const townFloor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshToonMaterial({color: 0x7CFC00}));
-townFloor.rotation.x = -Math.PI/2;
-const playerHouseExt = new THREE.Mesh(new THREE.BoxGeometry(8, 5, 8), new THREE.MeshToonMaterial({color: 0x3498db}));
-playerHouseExt.position.set(-10, 2.5, 5);
-const playerHouseDoor = new THREE.Mesh(new THREE.PlaneGeometry(2, 3), new THREE.MeshBasicMaterial({color: 0x000}));
-playerHouseDoor.position.set(-10, 1.5, 9.1);
-
-const labExt = new THREE.Mesh(new THREE.BoxGeometry(12, 6, 10), new THREE.MeshToonMaterial({color: 0xecf0f1}));
-labExt.position.set(10, 3, 5);
-const labDoor = new THREE.Mesh(new THREE.PlaneGeometry(3, 3), new THREE.MeshBasicMaterial({color: 0x000}));
-labDoor.position.set(10, 1.5, 10.1);
-
-const tallGrass = new THREE.Mesh(new THREE.PlaneGeometry(20, 10), new THREE.MeshToonMaterial({color: 0x228B22}));
-tallGrass.rotation.x = -Math.PI/2; tallGrass.position.set(0, 0.05, -20);
-townGroup.add(townFloor, playerHouseExt, playerHouseDoor, labExt, labDoor, tallGrass);
-
-// MAP 3: LAB (Offset at X = -100)
-labGroup.position.set(-100, 0, 0);
-const labFloor = new THREE.Mesh(new THREE.PlaneGeometry(15, 15), new THREE.MeshToonMaterial({color: 0xbdc3c7}));
-labFloor.rotation.x = -Math.PI/2;
-const profNpc = createCharacter(0x95a5a6); // White coat
-profNpc.position.set(0, 0, -4);
-const table = new THREE.Mesh(new THREE.BoxGeometry(6, 1, 2), new THREE.MeshToonMaterial({color: 0x8b4513}));
-table.position.set(0, 0.5, -2);
-const labExit = new THREE.Mesh(new THREE.PlaneGeometry(3, 0.1), new THREE.MeshBasicMaterial({color: 0x000000}));
-labExit.rotation.x = -Math.PI/2; labExit.position.set(0, 0.01, 7);
-labGroup.add(labFloor, profNpc, table, labExit);
-
-// PLAYER SETUP
-const playerModel = createCharacter(0x3498db);
-scene.add(playerModel);
-
-// MAP LOGIC
-function loadMap(mapName, startX, startZ) {
-    G.map = mapName;
-    let offsetX = 0;
-    if(mapName === 'house') offsetX = 100;
-    if(mapName === 'lab') offsetX = -100;
-    
-    G.player.x = startX + offsetX;
-    G.player.z = startZ;
-    
-    houseGroup.visible = (mapName === 'house');
-    townGroup.visible = (mapName === 'town');
-    labGroup.visible = (mapName === 'lab');
-    
-    let hint = "";
-    if(mapName === 'house') hint = "Talk to Mom.";
-    if(mapName === 'town') hint = G.flags.hasStarter ? "Head North to the tall grass." : "Find the Professor's Lab.";
-    if(mapName === 'lab') hint = "Talk to the Professor.";
-    
-    document.getElementById('topHint').textContent = hint;
-    document.getElementById('topHint').classList.remove('hidden');
-}
-
-/* --- INPUT & ANIMATION LOOP --- */
-window.addEventListener('keydown', e=>{ G.keys[e.key.toLowerCase()]=true; });
-window.addEventListener('keyup', e=>{ G.keys[e.key.toLowerCase()]=false; });
-const clock = new THREE.Clock();
-
-function animate(){
-  requestAnimationFrame(animate);
-  const dt = Math.min(clock.getDelta(), 0.05);
-
-  if (G.mode === 'explore'){
-    let x=0,y=0;
-    if (G.keys['w']||G.keys['arrowup']) y+=1; if (G.keys['s']||G.keys['arrowdown']) y-=1;
-    if (G.keys['a']||G.keys['arrowleft']) x-=1; if (G.keys['d']||G.keys['arrowright']) x+=1;
-    
-    const len = Math.hypot(x,y); 
-    if (len > 0.01){
-      G.player.x += (x/len) * G.player.speed * dt; 
-      G.player.z -= (y/len) * G.player.speed * dt;
-      playerModel.rotation.y = Math.atan2(x, -y);
-      
-      // COLLISION & TRIGGERS
-      if (G.map === 'house') {
-          // Talk to mom
-          if (Math.hypot(G.player.x - 102, G.player.z - -2) < 1.5) {
-              G.keys = {}; // Stop moving
-              showDialog([
-                  `MOM: Good morning, ${G.playerName}!`,
-                  "MOM: The Professor next door was looking for you.",
-                  "MOM: He said something about an important delivery. You should go see him!"
-              ], () => { G.flags.talkedToMom = true; });
-          }
-          // Exit House
-          if (G.player.z > 4) loadMap('town', -10, 11);
-      }
-      
-      if (G.map === 'town') {
-          // Enter House
-          if (Math.hypot(G.player.x - -10, G.player.z - 9) < 1.5) loadMap('house', 0, 3);
-          // Enter Lab
-          if (Math.hypot(G.player.x - 10, G.player.z - 10) < 1.5) loadMap('lab', 0, 6);
-          
-          // Wild Grass Logic
-          if (G.flags.hasStarter && Math.abs(G.player.x) < 10 && G.player.z < -15 && G.player.z > -25) {
-              if (Math.random() < 0.02) { // 2% chance per frame in grass
-                  G.keys = {};
-                  alert("A Wild Creature Appeared! (Battle Module Not Included in Prologue Demo)");
-                  G.player.z = -14; // Push out of grass for demo
-              }
-          } else if (!G.flags.hasStarter && G.player.z < -10) {
-              G.keys = {};
-              showDialog(["PROFESSOR: Wait! Don't go into the tall grass alone!", "PROFESSOR: Come to the Lab first!"]);
-              G.player.z = -8; // Push back
-          }
-      }
-      
-      if (G.map === 'lab') {
-          // Talk to Professor
-          if (Math.hypot(G.player.x - -100, G.player.z - -2) < 2) {
-              G.keys = {};
-              if (!G.flags.hasStarter) {
-                  showDialog([
-                      `PROFESSOR: Ah, ${G.playerName}! I've been waiting for you.`,
-                      "PROFESSOR: The frontier is dangerous. You need a partner.",
-                      "PROFESSOR: Go ahead. Pick one of the creatures on the table!"
-                  ], () => {
-                      document.getElementById('starterOverlay').classList.remove('hidden');
-                  });
-              } else {
-                  showDialog(["PROFESSOR: Take good care of your new partner!"]);
-              }
-          }
-          // Exit Lab
-          if (G.player.z > 6.5) loadMap('town', 10, 12);
-      }
-    }
-
-    camera.position.x += (G.player.x - camera.position.x) * 0.1;
-    camera.position.z += (G.player.z + 8 - camera.position.z) * 0.1;
-    camera.position.y += (6 - camera.position.y) * 0.1;
-    camera.lookAt(G.player.x, 0, G.player.z);
-    
-    playerModel.position.x = G.player.x;
-    playerModel.position.z = G.player.z;
-  }
-  renderer.render(scene, camera);
-}
-
-// DIALOG SYSTEM
-function showDialog(lines, onDone){
-  G.mode = 'dialog';
-  G.dialogQueue = lines.slice();
-  G.dialogCallback = onDone;
-  document.getElementById('dialogBox').classList.remove('hidden');
-  nextDialog();
-}
-
-function nextDialog(){
-  if(G.dialogQueue.length === 0){
-    document.getElementById('dialogBox').classList.add('hidden');
-    G.mode = 'explore';
-    if(G.dialogCallback) {
-        let cb = G.dialogCallback;
-        G.dialogCallback = null;
-        cb();
-    }
-    return;
-  }
-  document.getElementById('dialogText').textContent = G.dialogQueue.shift();
-}
-document.getElementById('dialogNext').onclick = nextDialog;
-
-// START SEQUENCE
-document.getElementById('startGameBtn').onclick = () => {
-    const nameInput = document.getElementById('playerNameInput').value.trim();
-    G.playerName = nameInput || "Player";
-    document.getElementById('startScreen').classList.add('hidden');
-    
-    // Spawn in House
-    loadMap('house', 0, 0);
-    G.mode = 'explore';
+// Game State & Controls
+const G = {
+    x: 0, z: 0, yaw: 0, pitch: -0.2, speed: 15,
+    moveX: 0, moveY: 0, lookDeltaX: 0, lookDeltaY: 0
 };
 
-// STARTER SELECTION UI
-const starterRow = document.getElementById('starterRow');
-['voltmouse', 'seedtoad', 'embertail', 'aquashell'].forEach(id=>{
-  const sp = SPECIES[id];
-  const card = document.createElement('div');
-  card.className = 'starterCard';
-  card.innerHTML = `<span style="font-size:24px;">${sp.name}</span><br><br><span style="color:${'#'+TYPE_COLOR[sp.type].toString(16)}">${sp.type}</span>`;
-  card.onclick = ()=>{
-    G.party = [makeCreature(id, 5)];
-    G.flags.hasStarter = true;
-    document.getElementById('starterOverlay').classList.add('hidden');
-    document.getElementById('topHint').textContent = "Exit the Lab.";
-    
-    showDialog([
-        `PROFESSOR: Excellent choice! ${sp.name} is incredibly loyal.`,
-        "PROFESSOR: Now, head north out of town into the tall grass. Your adventure begins!"
-    ]);
-  };
-  starterRow.appendChild(card);
+// Touch Controls
+const joyBase = document.getElementById('joyBase');
+const joyKnob = document.getElementById('joyKnob');
+let moveTouch = null, lookTouch = null, joyOrigin = {x:0, y:0}, lastLook = {x:0, y:0};
+
+window.addEventListener('touchstart', e => {
+    for(let i=0; i<e.changedTouches.length; i++){
+        const t = e.changedTouches[i];
+        if(t.clientX < window.innerWidth / 2 && !moveTouch){
+            moveTouch = t.identifier;
+            joyOrigin = {x: t.clientX, y: t.clientY};
+            joyBase.style.display = 'block';
+            joyBase.style.left = (t.clientX - 60) + 'px';
+            joyBase.style.top = (t.clientY - 60) + 'px';
+            joyKnob.style.transform = `translate(0px, 0px)`;
+        } else if(t.clientX >= window.innerWidth / 2 && !lookTouch){
+            lookTouch = t.identifier;
+            lastLook = {x: t.clientX, y: t.clientY};
+        }
+    }
 });
 
-requestAnimationFrame(animate);
+window.addEventListener('touchmove', e => {
+    for(let i=0; i<e.changedTouches.length; i++){
+        const t = e.changedTouches[i];
+        if(t.identifier === moveTouch){
+            let dx = t.clientX - joyOrigin.x;
+            let dy = t.clientY - joyOrigin.y;
+            const dist = Math.hypot(dx, dy);
+            const maxR = 35;
+            if(dist > maxR) { dx = (dx/dist)*maxR; dy = (dy/dist)*maxR; }
+            joyKnob.style.transform = `translate(${dx}px, ${dy}px)`;
+            G.moveX = dx / maxR;
+            G.moveY = -dy / maxR; // Invert Y for forward
+        } else if(t.identifier === lookTouch){
+            G.lookDeltaX += (t.clientX - lastLook.x);
+            G.lookDeltaY += (t.clientY - lastLook.y);
+            lastLook = {x: t.clientX, y: t.clientY};
+        }
+    }
+});
+
+const endTouch = e => {
+    for(let i=0; i<e.changedTouches.length; i++){
+        const t = e.changedTouches[i];
+        if(t.identifier === moveTouch){
+            moveTouch = null; G.moveX = 0; G.moveY = 0;
+            joyBase.style.display = 'none';
+        } else if(t.identifier === lookTouch){
+            lookTouch = null;
+        }
+    }
+};
+window.addEventListener('touchend', endTouch);
+window.addEventListener('touchcancel', endTouch);
+window.addEventListener('resize', () => { renderer.setSize(window.innerWidth, window.innerHeight); camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); });
+
+// Main Loop
+const clock = new THREE.Clock();
+function animate() {
+    requestAnimationFrame(animate);
+    const dt = Math.min(clock.getDelta(), 0.05);
+
+    // Camera Rotation
+    G.yaw -= G.lookDeltaX * 0.005;
+    G.pitch -= G.lookDeltaY * 0.005;
+    G.pitch = Math.max(-1.2, Math.min(1.2, G.pitch));
+    G.lookDeltaX = 0; G.lookDeltaY = 0;
+
+    // Movement relative to camera
+    if(Math.abs(G.moveX) > 0.1 || Math.abs(G.moveY) > 0.1){
+        const fwdX = Math.sin(G.yaw); const fwdZ = Math.cos(G.yaw);
+        const rightX = Math.sin(G.yaw + Math.PI/2); const rightZ = Math.cos(G.yaw + Math.PI/2);
+        
+        G.x += (fwdX * G.moveY + rightX * G.moveX) * G.speed * dt;
+        G.z += (fwdZ * G.moveY + rightZ * G.moveX) * G.speed * dt;
+        
+        playerGroup.rotation.y = Math.atan2(fwdX * G.moveY + rightX * G.moveX, fwdZ * G.moveY + rightZ * G.moveX);
+    }
+    
+    playerGroup.position.set(G.x, 0, G.z);
+
+    // Third Person Camera Math
+    const camDist = 6;
+    const camHeight = 2.5;
+    camera.position.x = G.x - Math.sin(G.yaw) * camDist;
+    camera.position.z = G.z - Math.cos(G.yaw) * camDist;
+    camera.position.y = camHeight - Math.sin(G.pitch) * camDist;
+    
+    camera.lookAt(G.x, 1.5, G.z);
+
+    renderer.render(scene, camera);
+}
+animate();
 })();
 </script>
 </body>
